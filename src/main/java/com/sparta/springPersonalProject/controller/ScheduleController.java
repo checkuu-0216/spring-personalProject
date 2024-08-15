@@ -16,7 +16,7 @@ public class ScheduleController {
 
     private final Map<Long, Schedule> scheduleList = new HashMap<>();
 
-    @PostMapping("/schedule")
+    @PostMapping("/schedule") //일정 생성
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto) {
         //requestdto -> entity
         Schedule schedule = new Schedule(requestDto);
@@ -34,7 +34,19 @@ public class ScheduleController {
         return scheduleResponseDto;
     }
 
-    @GetMapping("/schedule")
+    @GetMapping("/schedule/{id}") //단건조회
+    public ScheduleRequestDto getOneSchedule(@PathVariable long id,@RequestBody ScheduleRequestDto requestDto) {
+        if (scheduleList.containsKey(id)) {
+            Schedule schedule = scheduleList.get(id);
+
+            return requestDto;
+        } else {
+            throw new IllegalArgumentException("선택한 일정은 존재하지 않습니다.");
+        }
+
+    }
+
+    @GetMapping("/schedule") //스케줄 조회
     public List<ScheduleResponseDto> getSchedule() {
         // map to list
         List<ScheduleResponseDto> responseList = scheduleList.values().stream()
